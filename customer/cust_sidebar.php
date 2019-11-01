@@ -26,12 +26,28 @@
 
             </li>
 
+            <div>
+
+                <br />
+                <img class="img-profile img-circle img-responsive center-block" src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="" height="50%" width="50%">
+                <br />
+                <ul class="list-unstyled text-center">
+                    <li style="border-bottom: 0;"><label class="label label-info">UX Designer</label></li>
+                    <li style="border-bottom: 0;"><?php echo $_SESSION["user_name"]; ?></li>
+                    <!--                    <li style="border-bottom: 0;"><a href="#">Rebecca.S@website.com</a></li>-->
+                    <li style="border-bottom: 0;">Last logged in: <br /> <?php echo $_SESSION["last_login"]; ?></li>
+                </ul>
+            </div>
+            <br />
+
+
+            <li></li>
             <li>
                 <a href="admin_home.php"><i class="fa fa-home fa-fw"></i> Home</a>
             </li>
-            
+
             <li>
-                <a href="user.php"><i class="fa fa-cutlery fa-fw"></i> Restaurant Location</a>
+                <a href="restaurant_location.php"><i class="fa fa-cutlery fa-fw"></i> Restaurant Location</a>
             </li>
 
             <li>

@@ -1,3 +1,4 @@
+
 <div class="navbar-header">
 
     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -80,7 +81,7 @@
 
         <ul class="dropdown-menu dropdown-user">
 
-            <li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
+            <li><a href="profile.php"><i class="fa fa-user fa-fw"></i> User Profile</a>
 
             </li>
 
