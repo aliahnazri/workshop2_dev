@@ -33,6 +33,7 @@ if (isset($_POST['userid'])){
         $userlevel = $result_2['user_level'];
         $userstatus = $result_2['user_status'];
         $lastlogin = $result_2['last_login'];
+        $img = $result_2['user_img'];
         
         //Set up session
         $_SESSION['user_id'] = $userid;
@@ -41,19 +42,20 @@ if (isset($_POST['userid'])){
         $_SESSION['user_level']= $userlevel;
         $_SESSION['user_status']= $userstatus;
         $_SESSION['last_login']= $lastlogin;
+        $_SESSION['user_img']= $img;
                  
-        if($userlevel == 'STUDENT'){
-            $_SESSION['isStudent'] = true;
-            header("Location: student_performance.php");
+        if($userlevel == 'ADMIN'){
+            $_SESSION['isAdmin'] = true;
+            header("Location: admin/");
         }
 
-        elseif($userlevel == 'ADVISOR'){
-            $_SESSION['isAdvisor'] = true;                    
-            header("Location: advisor_student.php");
+        elseif($userlevel == 'MANAGER'){
+            $_SESSION['isManager'] = true;                    
+            header("Location: manager/");
         }
-        elseif($userlevel == 'ADMIN'){
-            $_SESSION['isAdmin'] = true;                    
-            header("Location: admin_statistics.php");
+        elseif($userlevel == 'CUSTOMER'){
+            $_SESSION['isCustomer'] = true;                    
+            header("Location: customer/");
         }
         else{
             $PasswordMessage = "Password is incorrect.";
@@ -64,7 +66,7 @@ if (isset($_POST['userid'])){
 
     else
     {
-        $UsernameMessage = "Username does not exist.";
+        $UsernameMessage = "Email is not registered.";
 //        echo "<script type='text/javascript'>alert('$message');</script>";
 //        header("refresh:1;");
     } 
@@ -86,16 +88,16 @@ if (isset($_POST['userid'])){
     <title>SB Admin 2 - Bootstrap Admin Theme</title>
 
     <!-- Bootstrap Core CSS -->
-    <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- MetisMenu CSS -->
-    <link href="../vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
+    <link href="vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
 
     <!-- Custom CSS -->
-    <link href="../dist/css/sb-admin-2.css" rel="stylesheet">
+    <link href="dist/css/sb-admin-2.css" rel="stylesheet">
 
     <!-- Custom Fonts -->
-    <link href="../vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -113,24 +115,36 @@ if (isset($_POST['userid'])){
             <div class="col-md-4 col-md-offset-4">
                 <div class="login-panel panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title">Please Sign In</h3>
+                        <h3 class="panel-title text-center">Restaurant Table Reservation</h3>
                     </div>
                     <div class="panel-body">
-                        <form role="form">
+                        <form role="form" action="" method="post">
+
+                            <?php if(isset($PasswordMessage)){ ?>
+                            <div class="alert alert-danger">
+                                <strong><?php echo $PasswordMessage; ?></strong><br />
+                            </div>
+                            <?php } 
+            
+                            elseif(isset($UsernameMessage)){ ?>
+                            <div class="alert alert-danger">
+                                <strong><?php echo $UsernameMessage; ?></strong><br />
+                            </div>
+                            <?php } ?>
+
                             <fieldset>
                                 <div class="form-group">
-                                    <input class="form-control" placeholder="E-mail" name="email" type="email" autofocus>
+                                    <input class="form-control" placeholder="E-mail" name="userid" type="email" autofocus>
                                 </div>
                                 <div class="form-group">
                                     <input class="form-control" placeholder="Password" name="password" type="password" value="">
-                                </div>
-                                <div class="checkbox">
-                                    <label>
-                                        <input name="remember" type="checkbox" value="Remember Me">Remember Me
-                                    </label>
+                                    <label class="label"><a href="#">Forgot Password?</a></label>
                                 </div>
                                 <!-- Change this to a button or input when using this as a form -->
-                                <a href="index.html" class="btn btn-lg btn-success btn-block">Login</a>
+                                <div class="btn-toolbar">
+                                    <button type="submit" class="btn btn-md btn-success pull-right">Sign In</button>
+                                    <a href="index.html" class="btn btn-md btn-primary pull-left">Sign Up</a>
+                                </div>
                             </fieldset>
                         </form>
                     </div>
@@ -140,16 +154,16 @@ if (isset($_POST['userid'])){
     </div>
 
     <!-- jQuery -->
-    <script src="../vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/jquery/jquery.min.js"></script>
 
     <!-- Bootstrap Core JavaScript -->
-    <script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
 
     <!-- Metis Menu Plugin JavaScript -->
-    <script src="../vendor/metisMenu/metisMenu.min.js"></script>
+    <script src="vendor/metisMenu/metisMenu.min.js"></script>
 
     <!-- Custom Theme JavaScript -->
-    <script src="../dist/js/sb-admin-2.js"></script>
+    <script src="dist/js/sb-admin-2.js"></script>
 
 </body>
 
