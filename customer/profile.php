@@ -1,5 +1,94 @@
 <?php include 'body_upper.php' ?>
 
+<?php 
+        
+include('../connect.php');
+$userid = $_SESSION['user_id'];
+
+// To update name
+$query = "SELECT * FROM `user` WHERE user_id = '$userid'";
+$result = mysqli_query($con,$query) or die(mysql_error());
+$row = mysqli_fetch_assoc($result);
+
+if(isset($_POST['updatePicture']))
+{   
+    $imgFile = $_FILES['user_image']['name'];
+    $tmp_dir = $_FILES['user_image']['tmp_name'];
+    $imgSize = $_FILES['user_image']['size'];
+
+    if(empty($imgFile)){
+        $errMSG = "Please Select Image File.";
+    }
+    
+    else
+    {
+        $upload_dir = '../user_images/'; // upload directory
+        $imgExt = strtolower(pathinfo($imgFile,PATHINFO_EXTENSION)); // get image extension
+		
+        // valid image extensions
+        $valid_extensions = array('jpeg', 'jpg', 'png', 'gif'); // valid extensions
+		
+        // rename uploading image
+        $userpic = rand(1000,1000000).".".$imgExt;
+				
+        // allow valid image file formats
+        if(in_array($imgExt, $valid_extensions)){			
+            
+            // Check file size '5MB'
+            if($imgSize < 5000000){
+                unlink($upload_dir.$row['user_img']);
+                move_uploaded_file($tmp_dir,$upload_dir.$userpic);
+            }
+            else{
+                $errMSG = "Sorry, your file is too large."; }
+        }
+        else{
+            $errMSG = "Sorry, only JPG, JPEG, PNG & GIF files are allowed."; }
+    }
+    
+    
+    if(!isset($errMSG))
+    {
+        $query = "UPDATE `user` SET user_img = '$userpic' WHERE user_id = '$userid'";
+        $result = mysqli_query($con, $query) or $error = die(mysqli_error());
+        
+        if(!isset($error))
+        {
+            $successMSG = "Profile picture has been updated.";
+        }
+        else
+        {
+            $errMSG = "Error updating profile picture.";
+        }
+    }    
+}
+
+if(isset($_POST['updateDetail']))
+{   
+    $username = $_POST['userName'];
+   
+    $sql = "UPDATE `user` SET user_name = '$username' WHERE user_id = '$userid';";   
+    $query = mysqli_query($con, $sql) or $error = mysqli_error($con);    
+    
+    if(!isset($error)){
+        $successMSG = "Your details has been updated.";
+//        header("Refresh:2");
+        } 
+    else { $errMSG = "Error updating data."; }  
+}
+
+if(isset($_POST['updatePassword']))
+{
+    if(md5($_POST["currentPassword"]) == $row["user_password"])
+    {
+        $sql = "UPDATE `user` SET user_password = '" . md5($_POST["newPassword"]) . "' WHERE user_id = '$userid'";
+        mysqli_query($con, $sql);
+        $smessage = "Password Changed";
+    }
+    else $emessage = "Current Password is not correct";
+}
+
+?>
 
 <div id="page-wrapper">
     <div class="row">
@@ -13,7 +102,7 @@
     <div class="row">
         <!--/col-3-->
         <div class="col-lg-12">
-            <ul class="nav nav-tabs">
+            <ul class="nav nav-tabs" id="myTab">
                 <li class="active"><a data-toggle="tab" href="#detail">User Details</a></li>
                 <li><a data-toggle="tab" href="#password">Password</a></li>
             </ul>
@@ -22,74 +111,103 @@
                 <div class="tab-pane active" id="detail">
                     <hr>
 
-                    <form class="form-horizontal" action="#" method="post" id="registrationForm">
 
-                        <div class="col-lg-3">
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    <h4 class="panel-title">Profile Picture</h4>
-                                </div>
-                                <div class="panel-body">
+                    <?php
+                            if(isset($errMSG)){
+                            ?>
+                    <div class="alert alert-danger">
+                        <strong><?php echo $errMSG; ?></strong><br />
+                    </div>
+                    <?php
+                            }
+                            else if(isset($successMSG)){
+                            ?>
+                    <div class="alert alert-success">
+                        <strong><?php echo $successMSG; ?></strong><br />
+                    </div>
+                    <?php
+                            }
+                            ?>
+
+
+                    <div class="col-lg-3">
+                        <div class="panel panel-default">
+                            <div class="panel-heading clearfix">
+                                <h3 class="panel-title pull-left">Profile Picture</h3>
+                            </div>
+
+                            <form class="form-horizontal" method="post" enctype="multipart/form-data" id="registrationForm">
+
+
+                                <div class="file-tab panel-body">
+                                    <center>
+                                        <p><img src="../user_images/<?php echo $row['user_img']; ?>" height="150" width="150" class="avatar" /></p>
+                                        <input type="file" name="user_image" class="file-upload" accept="image/*">
+                                    </center>
+
+                                    <br />
+
                                     <div class="form-group">
-                                        <div class="col-xs-12">
-
-                                            <center>
-                                                <img src="http://ssl.gstatic.com/accounts/ui/avatar_2x.png" class="avatar img-circle img-thumbnail" alt="avatar" width="68.5%" height="68.5%">
-                                                <br />
-                                                <br />
-                                                <input type="file" class="file-upload">
-                                            </center>
+                                        <div class="col-xs-12 btn-toolbar" style="justify-content: center; display: flex;">
+                                            <button name="updatePicture" class="btn btn-success" type="submit"><i class="glyphicon glyphicon-ok-sign"></i> Save</button>
+                                            <button class="btn" type="reset"><i class="glyphicon glyphicon-repeat"></i> Reset</button>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
 
-                        <div class="col-lg-9">
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    <h4 class="panel-title">User info</h4>
                                 </div>
-                                <div class="panel-body">
+                            </form>
+                        </div>
+                    </div>
+
+
+                    <div class="col-lg-9">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">User info</h4>
+                            </div>
+                            <div class="file-tab panel-body">
+
+                                <form class="form-horizontal" method="post" enctype="multipart/form-data" id="registrationForm">
+
 
                                     <div class="form-group">
                                         <label class="col-xs-1 control-label">Email</label>
                                         <div class="col-xs-11">
-                                            <input type="text" class="form-control" value="<?php echo $row['user_id']; ?>">
+                                            <input name="userEmail" readonly type="text" class="form-control" value="<?php echo $row['user_id']; ?>">
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-xs-1 control-label">Name</label>
                                         <div class="col-xs-11">
-                                            <input type="text" class="form-control" value="<?php echo $row['user_name']; ?>">
+                                            <input name="userName" type="text" class="form-control" value="<?php echo $row['user_name']; ?>">
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-xs-1 control-label">Level</label>
                                         <div class="col-xs-11">
-                                            <input type="text" class="form-control" value="<?php echo $row['manager_position']; ?>">
+                                            <input name="userLevel" readonly type="text" class="form-control" value="<?php echo $row['user_level']; ?>">
                                         </div>
                                     </div>
 
                                     <div class="form-group">
                                         <label class="col-xs-1 control-label">Status</label>
                                         <div class="col-xs-11">
-                                            <input type="text" class="form-control" value="<?php echo $row['manager_position']; ?>">
+                                            <input name="userStatus" readonly type="text" class="form-control" value="<?php echo $row['user_status']; ?>">
                                         </div>
                                     </div>
-                                </div>
+
+                                    <div class="form-group">
+                                        <div class="col-xs-12 btn-toolbar" style="justify-content: center; display: flex;">
+                                            <button name="updateDetail" class="btn btn-success" type="submit"><i class="glyphicon glyphicon-ok-sign"></i> Save</button>
+                                            <button class="btn" type="reset"><i class="glyphicon glyphicon-repeat"></i> Reset</button>
+                                            <button onClick="document.location.reload(true)" class="btn btn-primary" type="button"><i class="glyphicon glyphicon-refresh"></i> Refresh</button>
+
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
                         </div>
-
-                        <div class="form-group">
-                            <div class="col-xs-12 btn-toolbar">
-                                <button class="btn btn-success pull-right" type="submit"><i class="glyphicon glyphicon-ok-sign"></i> Save</button>
-                                <button class="btn pull-right" type="reset"><i class="glyphicon glyphicon-repeat"></i> Reset</button>
-                            </div>
-                        </div>
-
-                    </form>
-
+                    </div>
                     <hr>
 
                 </div>
@@ -101,13 +219,26 @@
                     <div class="col-xs-12 col-sm-12">
                         <form name="frmChange" class="form-horizontal" method="post" action="" onSubmit="return validatePassword()">
 
-                            <div class="message">
-                                <?php if(isset($message)) { echo $message; } ?>
+                            <?php
+                            if(isset($emessage)){
+                            ?>
+                            <div class="alert alert-danger">
+                                <strong><?php echo $emessage; ?></strong><br />
                             </div>
+                            <?php
+                            }
+                            else if(isset($smessage)){
+                            ?>
+                            <div class="alert alert-success">
+                                <strong><?php echo $smessage; ?></strong><br />
+                            </div>
+                            <?php
+                            }
+                            ?>
 
                             <div class="panel panel-default">
                                 <div class="panel-heading">
-                                    <h4 class="panel-title">Security</h4>
+                                    <h4 class="panel-title">Password</h4>
                                 </div>
                                 <div class="panel-body">
                                     <div class="form-group">
@@ -132,7 +263,7 @@
 
                                     <div class="form-group">
                                         <div class="col-sm-10 col-sm-offset-2">
-                                            <button type="submit" class="btn btn-primary">Submit</button>
+                                            <button name="updatePassword" type="submit" class="btn btn-primary">Submit</button>
                                             <button type="reset" class="btn btn-default">Cancel</button>
                                         </div>
                                     </div>
@@ -144,12 +275,7 @@
                     </div>
                 </div>
                 <!--/tab-pane-->
-
-
             </div>
-            <!--/tab-pane-->
-            <!--        </div>-->
-            <!--/tab-content-->
 
         </div> <!-- row -->
 
@@ -160,6 +286,18 @@
     <!-- /#page-wrapper -->
 
     <?php include 'body_lower.php' ?>
+
+    <script>
+        $(document).ready(function() {
+            $('a[data-toggle="tab"]').on('show.bs.tab', function(e) {
+                localStorage.setItem('activeTab', $(e.target).attr('href'));
+            });
+            var activeTab = localStorage.getItem('activeTab');
+            if (activeTab) {
+                $('#myTab a[href="' + activeTab + '"]').tab('show');
+            }
+        });
+    </script>
 
     <script>
         $(document).ready(function() {
