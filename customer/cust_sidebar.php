@@ -12,7 +12,7 @@
                 </div>
                 <!-- /input-group -->
             </li>
-            
+
             <div>
                 <br />
                 <img class="img-profile img-circle img-responsive center-block" src="../user_images/<?php echo $_SESSION['user_img']; ?>" alt="" height="50%" width="50%">
@@ -27,17 +27,10 @@
             <br />
 
             <li></li>
-            <li>
-                <a href="admin_home.php"><i class="fa fa-home fa-fw"></i> Home</a>
-            </li>
-
-            <li>
-                <a href="restaurant_location.php"><i class="fa fa-cutlery fa-fw"></i> Restaurant Location</a>
-            </li>
-
-            <li>
-                <a href="#"><i class="fa fa-calendar fa-fw"></i> Reservation List</a>
-            </li>
+            <li><a href="admin_home.php"><i class="fa fa-home fa-fw"></i> Home</a></li>
+            <li><a href="restaurant_location.php"><i class="fa fa-cutlery fa-fw"></i> Restaurant Location</a></li>
+            <li><a href="table_reservation_list.php"><i class="fa fa-calendar fa-fw"></i> Reservation List</a></li>
+            <li><a href="owner_reservation_list.php"><i class="fa fa-calendar fa-fw"></i> Reservation List - Owner</a></li>
 
         </ul>
 
