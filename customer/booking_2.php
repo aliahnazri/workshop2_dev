@@ -16,7 +16,7 @@ include '../connect.php';
 
 $userid = $_SESSION['user_id'];
 $restaurantID = $_GET['restaurantID'];    
-$tableID = $_GET['tableID'];    
+$tableID = $_GET['tableID'];
     
 $query = "SELECT * FROM restaurant JOIN restaurant_table ON restaurant.rest_id = restaurant_table.rest_id
 WHERE restaurant.rest_id AND restaurant_table.table_id= '$tableID'";
@@ -29,8 +29,8 @@ if(isset($_POST['confirm']))
     $date = $_POST['date'];    
     $time = $_POST['time'];    
     
-    $sql = "INSERT INTO table_reservation (table_id, user_id, deposit, date, time, payment_status) VALUES ('$tableID', '$userid', 10, '$date', '$time', 'PENDING')";   
-    $query = mysqli_query($con, $sql) or $error = mysqli_error($con);    
+    $sql = "INSERT INTO table_reservation (table_id, user_id, deposit, date, time_id, payment_status) VALUES ('$tableID', '$userid', 10, '$date', '$time', 'PENDING')";   
+    $query = mysqli_query($con, $sql) or $error = die(mysqli_error($con));    
     
     if(!isset($error)){
         $successMSG = "Thank you. Your booking has been confirmed.";
@@ -77,7 +77,7 @@ if(isset($_POST['confirm']))
                         <div class="form-group">
                             <label class="col-sm-2 control-label">Deposit (RM)</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" name="deposit" id="deposit" value="50" readonly>
+                                <input type="text" class="form-control" name="deposit" id="deposit" value="10" readonly>
                             </div>
                         </div>
 
@@ -88,24 +88,38 @@ if(isset($_POST['confirm']))
                             </div>
                         </div>
 
+                        <!--
                         <div class="form-group">
                             <label class="col-sm-2 control-label">Time</label>
                             <div class="col-sm-10">
                                 <input type="time" class="form-control" name="time" id="time">
                             </div>
                         </div>
+-->
 
                         <div class="form-group">
                             <label class="col-sm-2 control-label">Time</label>
                             <div class="col-sm-10">
-                                <select name="year" class="form-control" required>
+                                <select name="time" class="form-control" required>
                                     <option value=''>SELECT TIME</option>
-                                    <?php 
-                        $sql = "SELECT time_available FROM reservation_time";
-                        $res = mysqli_query($con, $sql);
+                                    <?php
+                                    
+//                        $sql_3 = "SELECT time_id FROM table_reservation WHERE table_id = '$tableID' AND user_id = '$userid'";
+//                        $result_3 = mysqli_query($con, $sql_3) or die (mysqli_error($con));
+//                                    
+//                        while($row_3 = mysqli_fetch_array($result_3)) {             
+////                        $time = $row_3['tablebook_id'];
+//                        $time = $row_3['time_id'];
+//                        }                                              
+//                                   
+                                    
+                        $sql_4 = "SELECT * FROM reservation_time";
+                        $res = mysqli_query($con, $sql_4);
                         if(mysqli_num_rows($res) > 0) {
                             while($row = mysqli_fetch_object($res)) {
+//                                if ($row->time_id != $time) {
                                 echo "<option value='".$row->time_id."'>".$row->time_available."</option>";
+//                                }
                             }
                         }
                         ?>
@@ -116,7 +130,7 @@ if(isset($_POST['confirm']))
                         <div class="form-group">
                             <div class="col-sm-10 col-sm-offset-2">
                                 <button name="confirm" type="submit" class="btn btn-primary">Confirm</button>
-                                <button type="button" class="btn btn-default"><a href="">Back</a></button>
+                                <a href="booking_1.php?restaurantID=<?php echo $restaurantID; ?>"><button type="button" class="btn btn-default">Back</button></a>
                             </div>
                         </div>
                     </div>
@@ -134,6 +148,9 @@ if(isset($_POST['confirm']))
 
 <!-- /#page-wrapper -->
 
-
+<script>
+    var today = new Date().toISOString().split('T')[0];
+    document.getElementsByName("date")[0].setAttribute('min', today);
+</script>
 
 <?php include 'body_lower.php' ?>

@@ -46,16 +46,16 @@ if (isset($_POST['userid'])){
                  
         if($userlevel == 'ADMIN'){
             $_SESSION['isAdmin'] = true;
-            header("Location: admin/");
+            header("Location: admin/admin_profile.php");
         }
 
         elseif($userlevel == 'MANAGER'){
             $_SESSION['isManager'] = true;                    
-            header("Location: manager/");
+            header("Location: owner/profile.php");
         }
         elseif($userlevel == 'CUSTOMER'){
             $_SESSION['isCustomer'] = true;                    
-            header("Location: customer/");
+            header("Location: customer/profile.php");
         }
         else{
             $PasswordMessage = "Password is incorrect.";

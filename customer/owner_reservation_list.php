@@ -30,8 +30,8 @@ include '../connect.php';
 $userid = $_SESSION['user_id'];
 //$restaurantID = $_GET['restaurantID'];    
     
-$query = "SELECT * FROM restaurant JOIN restaurant_table JOIN table_reservation JOIN user ON
-restaurant.rest_id = restaurant_table.rest_id AND restaurant_table.table_id = table_reservation.table_id AND table_reservation.user_id = user.user_id
+$query = "SELECT * FROM restaurant JOIN restaurant_table JOIN table_reservation JOIN user JOIN reservation_time ON
+restaurant.rest_id = restaurant_table.rest_id AND restaurant_table.table_id = table_reservation.table_id AND table_reservation.user_id = user.user_id AND table_reservation.time_id = reservation_time.time_id
 WHERE table_reservation.user_id = '$userid'";
                             
 $result = mysqli_query($con,$query) or die(mysqli_error($con));
@@ -42,7 +42,7 @@ while($row = mysqli_fetch_array($result)) {
                     <td><center><?php echo $row['table_no']; ?></center></td>
                     <td><center><?php echo $row['user_name']; ?></center></td>
                     <td><center><?php echo $row['date']; ?></center></td>
-                    <td><center><?php echo $row['time']; ?></center></td>
+                    <td><center><?php echo $row['time_available']; ?></center></td>
                     <td><center><?php echo $row['checkout']; ?></center></td>
                     <td><center><?php echo $row['payment_status']; ?></center></td>
                     <td><a href="owner_paid.php?tableID=<?php echo $row['table_id']; ?>&tablebookID=<?php echo $row['tablebook_id']; ?>" class="btn btn-sm btn-success btn-block" role="button">PAID</a></td>

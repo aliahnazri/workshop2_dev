@@ -2,7 +2,7 @@
 include '../connect.php';
 $total =0;
 $query = "SELECT COUNT(*) AS total FROM restaurant WHERE status='PENDING'";
-$result =mysqli_query($con,$query);
+$result =mysqli_query($con,$query) or die(mysqli_error($con));
 while($row = mysqli_fetch_array($result)){
     $total = $row["total"];
 }

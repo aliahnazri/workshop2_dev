@@ -18,12 +18,19 @@
 
 
     <div class="row">
-        <div class="col-sm-6">
+        <div class="col-sm-12">
             <!--left col-->
 
+            <?php
 
+include '../connect.php';
+$restaurantID = $_GET['restaurantID'];    
+$query = "SELECT * FROM restaurant where rest_id = '$restaurantID'";                    
+$result = mysqli_query($con,$query) or die(mysqli_error($con));
+$row = mysqli_fetch_array($result);
+?>
             <div class="text-center">
-                <img src="http://placehold.it/500x300" alt="">
+                <img src="../restaurant_images/<?php echo $row['rest_img']; ?>" height="300px" width="500px" alt="">
 
             </div>
 
@@ -35,12 +42,14 @@
             <br />
 
 
+            <!--
             <div class="panel panel-default">
                 <div class="panel-heading">Website <i class="fa fa-link fa-1x"></i></div>
                 <div class="panel-body"><a href="http://bootnipets.com">bootnipets.com</a></div>
             </div>
+-->
 
-<?php
+            <?php
 
 include '../connect.php';
 $restaurantID = $_GET['restaurantID'];    
@@ -49,7 +58,7 @@ $query = "SELECT * FROM restaurant where rest_id = '$restaurantID'";
                             
 $result = mysqli_query($con,$query) or die(mysqli_error($con));
 while($row = mysqli_fetch_array($result)) { 
-?>            
+?>
 
             <ul class="list-group">
                 <!--                <li class="list-group-item text-muted">Activity <i class="fa fa-dashboard fa-1x"></i></li>-->
@@ -59,13 +68,20 @@ while($row = mysqli_fetch_array($result)) {
                 <li class="list-group-item text-center"><?php echo $row['rest_phone_no']; ?></li>
                 <li class="list-group-item text-center">Operating Hours</li>
             </ul>
-            
-<?php } ?>            
 
-<!--            <button type="button" style="float:center" class="btn btn-success btn-block">Book Now</button>-->
-            <a href="booking_1.php?restaurantID=<?php echo $restaurantID; ?>" class="btn btn-success btn-block" role="button">Book Now</a>
+            <?php } ?>
 
-            <br/>
+            <!--            <button type="button" style="float:center" class="btn btn-success btn-block">Book Now</button>-->
+            <div class="row">
+                <div class="col-sm-6">
+                    <a href="booking_1.php?restaurantID=<?php echo $restaurantID; ?>" class="btn btn-success btn-block" role="button">Book Now</a>
+                </div>
+                <div class="col-sm-6">
+                    <a href="restaurant_location.php?restaurantID=<?php echo $restaurantID; ?>" class="btn btn-primary btn-block" role="button">Back</a>
+                </div>
+            </div>
+
+            <br />
         </div>
         <!--/col-3-->
         <div class="col-sm-6">

@@ -31,8 +31,8 @@ include '../connect.php';
 $userid = $_SESSION['user_id'];
 //$restaurantID = $_GET['restaurantID'];    
     
-$query = "SELECT * FROM restaurant JOIN restaurant_table JOIN table_reservation ON
-restaurant.rest_id = restaurant_table.rest_id AND restaurant_table.table_id = table_reservation.table_id
+$query = "SELECT * FROM restaurant JOIN restaurant_table JOIN table_reservation JOIN reservation_time ON
+restaurant.rest_id = restaurant_table.rest_id AND restaurant_table.table_id = table_reservation.table_id AND table_reservation.time_id = reservation_time.time_id
 WHERE table_reservation.user_id = '$userid'";
                             
 $result = mysqli_query($con,$query) or die(mysqli_error($con));
@@ -44,7 +44,7 @@ while($row = mysqli_fetch_array($result)) {
                     <td><center><?php echo $row['table_no']; ?></center></td>
                     <td><center><?php echo $row['table_pax']; ?></center></td>
                     <td><center><?php echo $row['date']; ?></center></td>
-                    <td><center><?php echo $row['time']; ?></center></td>
+                    <td><center><?php echo $row['time_available']; ?></center></td>
                     <td><center><?php echo $row['checkout']; ?></center></td>
                     <td><center><?php echo $row['payment_status']; ?></center></td>
                     <td><a href="booking_2.php?restaurantID=<?php echo $restaurantID; ?>&tableID=<?php echo $row['table_id']; ?>" class="btn btn-sm btn-success btn-block" role="button">See Menu</a></td>

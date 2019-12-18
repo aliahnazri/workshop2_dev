@@ -45,7 +45,8 @@
 
         <div class="col-xs-18 col-sm-6 col-md-3">
             <div id="example" class="thumbnail">
-                <img src="http://placehold.it/500x300" alt="">
+<!--                <img src="http://placehold.it/500x300" alt="">-->
+                <p><img src="../restaurant_images/<?php echo $row['rest_img']; ?>" height="200px" width="227px"/></p>
                 <div class="caption">
                     <h4 class="text-center"><?php echo $row['rest_name']; ?></h4>
                     <p class="text-center"><?php echo $row['rest_address']; ?></p>

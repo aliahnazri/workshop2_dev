@@ -27,10 +27,18 @@
             <br />
 
             <li></li>
-            <li><a href="cust_home.php"><i class="fa fa-home fa-fw"></i> Home</a></li>
-            <li><a href="restaurant_location.php"><i class="fa fa-cutlery fa-fw"></i> Restaurant Location</a></li>
-            <li><a href="table_reservation_list.php"><i class="fa fa-calendar fa-fw"></i> Reservation List</a></li>
-            <li><a href="owner_reservation_list.php"><i class="fa fa-calendar fa-fw"></i> Reservation List - Owner</a></li>
+            <li>
+                <a href="restaurant.php"><i class="fa fa-home fa-fw"></i>Restaurant</a>
+            </li>
+            <li>
+                <a href="reservation.php"><i class="fa fa-calendar fa-fw"></i> Reservation</a>
+            </li>
+            <li>
+                <a href="menu.php"><i class="fa fa-cutlery fa-fw"></i> Menu</a>
+            </li>
+            <li>
+                <a href="rating.php"><i class="fa fa-star-o fa-fw"></i> Reviews and Rating</a>
+            </li>
 
         </ul>
 
